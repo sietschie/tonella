@@ -13,4 +13,6 @@ Todo list for Tonella
 * use github actions
 * add code coverage
 * add static analyzing tool
+* create phone app to write nfc tokens
+* use standardized format to write to nfc tokens
 
