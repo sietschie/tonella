@@ -10,17 +10,51 @@ on: [push, pull_request]
 # started depends on how many configurations the matrix
 # will produce.
 jobs:
-  sonarCloudTrigger:
-    name: SonarCloud Trigger
+  clang-format:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+    steps:
+    - uses: actions/checkout@v1
+    - uses: DoozyX/clang-format-lint-action@v0.5
+      with:
+        source: 'src'
+        exclude: './third_party'
+        extensions: 'h,cpp'
+        clangFormatVersion: 9
+
+  cpp-doc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Doxygen
+      run: |
+          cd doc
+          wget http://doxygen.nl/files/doxygen-1.8.17.linux.bin.tar.gz
+          tar xvf doxygen-1.8.17.linux.bin.tar.gz
+          doxygen-1.8.17/bin/doxygen Doxyfile
+
+  python-format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Python Style Checker
+      uses: andymckay/pycodestyle-action@0.1.3
+
+  python-doc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Python Docstring Checker
+      run: |
+          pip3 install pydocstyle --user
+          ~/.local/bin/pydocstyle src
+      
 
   # This is the name of the job - can be whatever.
   compile:
