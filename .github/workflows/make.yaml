@@ -75,3 +75,13 @@ jobs:
       # in the build matrix.
       - name: Compile Sketch
         run: arduino-cli compile --fqbn ${{ matrix.fqbn }} src/tonella/tonella.ino
+
+      - name: Copy binaries
+        run: |
+            mkdir build
+            cp src/tonella/tonella.ino.arduino.* build/
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
