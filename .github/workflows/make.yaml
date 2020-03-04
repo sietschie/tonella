@@ -19,7 +19,7 @@ jobs:
       with:
         source: 'src'
         exclude: './third_party'
-        extensions: 'h,cpp'
+        extensions: 'h,cpp,ino'
         clangFormatVersion: 9
 
   cpp-doc:
