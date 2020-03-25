@@ -9,3 +9,4 @@
 void led_init();
 void led_loop();
 void led_start(byte mode, unsigned long duration, int payload = 0);
+void led_set(byte r, byte g, byte b);

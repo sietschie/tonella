@@ -20,7 +20,7 @@ byte volume = 0;
 byte currentMode = 0;
 
 // DFPlayer Mini
-SoftwareSerial serialDfPlayer(3, 2); // RX, TX
+SoftwareSerial serialDfPlayer(2, 3); // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
 
@@ -39,28 +39,41 @@ void setup() {
   Serial.begin(115200);
 
   // Init LED
+  Serial.print(F("Init LED: "));
   led_init();
+  led_set(1,1,1);
+  Serial.println(F("done"));
 
-  nfc_init();
+  Serial.print(F("Init NFC: "));
+  if(!nfc_init())
+  {
+    Serial.println(F("Communication failure"));
+    led_set(0,0,10); // show blue on error
+    while (true)
+      ;
+  }
+  Serial.println(F("done"));
 
-  Serial.println(F("Start DFPlayer"));
+  Serial.print(F("Init DFPlayer: "));
   serialDfPlayer.begin(9600);
 
   if (!myDFPlayer.begin(
           serialDfPlayer)) { // Use softwareSerial to communicate with mp3.
+    Serial.println(F(""));
     Serial.println(F("Unable to begin:"));
     Serial.println(F("1.Please recheck the connection!"));
     Serial.println(F("2.Please insert the SD card!"));
+    led_set(10,0,0); // show red on error
     while (true)
       ;
   }
-  Serial.println(F("DFPlayer Mini online."));
+  Serial.println(F("done"));
 
+  Serial.print(F("Read saved Volume: "));
   volume = memory_get_volume();
-  Serial.print("volume = ");
-  Serial.println(volume);
   myDFPlayer.volume(volume); // Set volume value. From 0 to 30
-  // myDFPlayer.play(1);  //Play the first mp3
+  Serial.print("set volume to ");
+  Serial.println(volume);
 
   led_start(LED_MODE_BREATH, 2000);
   idle(2000);

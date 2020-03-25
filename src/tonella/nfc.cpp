@@ -12,21 +12,24 @@ bool rfid_tag_present = false;
 int _rfid_error_counter = 0;
 bool _tag_found = false;
 
-void nfc_init() {
+bool nfc_init() {
   // Init NFC
   SPI.begin();        // Init SPI bus
   mfrc522.PCD_Init(); // Init MFRC522
-  // delay(4);       // Optional delay. Some board do need more time after init
-  // to be ready, see Readme mfrc522.PCD_DumpVersionToSerial();  // Show details
-  // of PCD - MFRC522 Card Reader details Serial.println(F("Scan PICC to see
-  // UID, SAK, type, and data blocks...")); Prepare the key (used both as key A
-  // and as key B) using FFFFFFFFFFFFh which is the default at chip delivery
-  // from the factory
+
+  // check communication
+  byte v = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
+  // When 0x00 or 0xFF is returned, communication probably failed
+  if ((v == 0x00) || (v == 0xFF))
+  {
+    return false;
+  }
+
   for (byte i = 0; i < 6; i++) {
     key.keyByte[i] = 0xFF;
   }
 
-  // Serial.println(F("RC522 ready."));
+  return true;
 }
 
 bool readCard(byte *index) {

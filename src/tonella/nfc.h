@@ -6,4 +6,4 @@
 
 bool readCard(byte *index);
 byte checkCardStatus(byte *index);
-void nfc_init();
+bool nfc_init();
