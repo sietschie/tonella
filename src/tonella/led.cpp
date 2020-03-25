@@ -125,8 +125,7 @@ bool update_wipe() {
   return true;
 }
 
-void led_set(byte r, byte g, byte b)
-{
+void led_set(byte r, byte g, byte b) {
   for (int index_pixel = 0; index_pixel < NUMPIXELS; index_pixel++) {
     pixels.setPixelColor(index_pixel, pixels.Color(r, g, b));
   }

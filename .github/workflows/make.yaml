@@ -82,7 +82,7 @@ jobs:
 
     # This is the platform GitHub will use to run our workflow, we
     # pick Windows for no particular reason.
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     # This is the list of steps this job will run.
     steps:
@@ -104,6 +104,7 @@ jobs:
           arduino-cli lib install MFRC522
           arduino-cli lib install DFRobotDFPlayerMini
           arduino-cli lib install "Adafruit NeoPixel"
+          git clone https://github.com/aroller/NDEF-MFRC522.git ../../../Arduino/libraries/NDEF-MFRC522
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.

@@ -41,14 +41,13 @@ void setup() {
   // Init LED
   Serial.print(F("Init LED: "));
   led_init();
-  led_set(1,1,1);
+  led_set(1, 1, 1);
   Serial.println(F("done"));
 
   Serial.print(F("Init NFC: "));
-  if(!nfc_init())
-  {
+  if (!nfc_init()) {
     Serial.println(F("Communication failure"));
-    led_set(0,0,10); // show blue on error
+    led_set(0, 0, 10); // show blue on error
     while (true)
       ;
   }
@@ -63,7 +62,7 @@ void setup() {
     Serial.println(F("Unable to begin:"));
     Serial.println(F("1.Please recheck the connection!"));
     Serial.println(F("2.Please insert the SD card!"));
-    led_set(10,0,0); // show red on error
+    led_set(10, 0, 0); // show red on error
     while (true)
       ;
   }
@@ -82,9 +81,13 @@ void setup() {
 void loop(void) {
   idle(100);
 
-  byte index = 0;
-  byte nfc_status = checkCardStatus(&index);
+  int index = 0;
+  char type = 0;
+  byte nfc_status = checkCardStatus(type, index);
   if (nfc_status == NFC_TAG_FOUND) {
+    if (type == 'e') {
+      Serial.println("Error reading tag");
+    }
     Serial.println("Tag found");
     Serial.println(index);
     if (index == COMMAND_MODE_CHANGE) {

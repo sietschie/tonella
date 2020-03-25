@@ -1,6 +1,7 @@
 #include "nfc.h"
 
 #include <MFRC522.h>
+#include <MifareUltralight.h>
 
 // NFC Board
 #define RST_PIN 9                 // Configurable, see typical pin layout above
@@ -20,8 +21,7 @@ bool nfc_init() {
   // check communication
   byte v = mfrc522.PCD_ReadRegister(mfrc522.VersionReg);
   // When 0x00 or 0xFF is returned, communication probably failed
-  if ((v == 0x00) || (v == 0xFF))
-  {
+  if ((v == 0x00) || (v == 0xFF)) {
     return false;
   }
 
@@ -32,61 +32,53 @@ bool nfc_init() {
   return true;
 }
 
-bool readCard(byte *index) {
-  // mfrc522.PICC_IsNewCardPresent();
-  // mfrc522.PICC_ReadCardSerial();
+bool readCard(char &type, int &index) {
 
-  Serial.print("PICC Type = ");
-  Serial.println(mfrc522.PICC_GetType(mfrc522.uid.sak));
+  ndef_mfrc522::MifareUltralight reader =
+      ndef_mfrc522::MifareUltralight(mfrc522);
+  ndef_mfrc522::NfcTag tag = reader.read();
+  ndef_mfrc522::NdefMessage msg = tag.getNdefMessage();
 
-  // In this sample we use the second sector,
-  // that is: sector #1, covering block #4 up to and including block #7
-  byte sector = 1;
-  byte trailerBlock = 7;
-  byte blockAddr = 4;
-  MFRC522::StatusCode status;
-  int32_t tagNr;
+  if (msg.getRecordCount() < 3) {
+    Serial.println("NFC: Not enough records found on rfid chip");
+    type = 'e';
+    index = 1;
+    return false;
+  }
 
-  if (mfrc522.PICC_GetType(mfrc522.uid.sak) ==
-      4) // don't authenticate for mifare ultralight tags
+  ndef_mfrc522::NdefRecord rcd = msg.getRecord(0);
+  char bufferType[2];
+  rcd.getType(bufferType);
+  if (bufferType[0] != 0x54) {
+    Serial.println("NFC: Unexpected record type");
+    type = 'e';
+    index = 2;
+    return false;
+  }
+
+  // read and parse record 0
+  byte payload[rcd.getPayloadLength() + 1];
+  rcd.getPayload(payload);
+
+  type = payload[3];
+
+  payload[rcd.getPayloadLength()] = '\0'; // add zero termination
+  String id((char *)payload + 4);
+  index = id.toInt();
+
   {
-    // Authenticate using key A
-    Serial.println();
-    // Serial.println(F("Authenticating using key A..."));
-    status = (MFRC522::StatusCode)mfrc522.PCD_Authenticate(
-        MFRC522::PICC_CMD_MF_AUTH_KEY_A, trailerBlock, &key, &(mfrc522.uid));
-    if (status != MFRC522::STATUS_OK) {
-      Serial.print(F("PCD_Authenticate() failed: "));
-      Serial.println(mfrc522.GetStatusCodeName(status));
-      // return false;
-    }
+    ndef_mfrc522::NdefRecord rcd = msg.getRecord(1);
+    byte payload[rcd.getPayloadLength() + 1];
+    rcd.getPayload(payload);
+    payload[rcd.getPayloadLength()] = '\0'; // add zero termination
+    String figurineName((char *)payload + 3);
+    Serial.println(figurineName);
   }
 
-  // Read data from the block
-  Serial.print(F("Reading data from block "));
-  Serial.print(blockAddr);
-  Serial.println(F(" ..."));
-  status = (MFRC522::StatusCode)mfrc522.MIFARE_GetValue(blockAddr, &tagNr);
-  if (status != MFRC522::STATUS_OK) {
-    Serial.print(F("MIFARE_Read() failed: "));
-    Serial.println(mfrc522.GetStatusCodeName(status));
-    return false;
-  }
-  // Serial.print(F("tagNr ")); Serial.print(tagNr);
-
-  // Halt PICC
-  mfrc522.PICC_HaltA();
-  // Stop encryption on PCD
-  mfrc522.PCD_StopCrypto1();
-
-  if (tagNr > 255 || tagNr < 0)
-    return false;
-
-  index[0] = tagNr;
   return true;
 }
 
-byte checkCardStatus(byte *index) {
+byte checkCardStatus(char &type, int &index) {
   rfid_tag_present_prev = rfid_tag_present;
 
   _rfid_error_counter += 1;
@@ -122,7 +114,7 @@ byte checkCardStatus(byte *index) {
   if (rfid_tag_present && !rfid_tag_present_prev) {
     // Serial.println("Tag found");
     status = NFC_TAG_FOUND;
-    readCard(index);
+    readCard(type, index);
     mfrc522.PCD_Reset();
     delay(100);
     mfrc522.PCD_Init(); // Init MFRC522
