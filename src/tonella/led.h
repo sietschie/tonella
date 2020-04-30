@@ -1,12 +1,34 @@
+#pragma once
+
 #include "Arduino.h"
+#include "iled.h"
+#include <Adafruit_NeoPixel.h>
 
-#define LED_MODE_NONE 0
-#define LED_MODE_WIPE 1
-#define LED_MODE_BLINK 2
-#define LED_MODE_BREATH 3
-#define LED_MODE_VOLUME 4
+/**
+ * led class controls LED state and animations
+ */
+class Led : public ILed {
+private:
+  uint8_t pin;
+  uint8_t num_pixels;
 
-void led_init();
-void led_loop();
-void led_start(byte mode, unsigned long duration, int payload = 0);
-void led_set(byte r, byte g, byte b);
+  Adafruit_NeoPixel pixels;
+
+  bool running = false;
+  byte current_mode = Led::Mode::None;
+  unsigned long time_start = 0;
+  unsigned long time_duration = 0;
+  int payload = 0;
+
+  bool update_breath();
+  bool update_volume();
+  bool update_blink();
+  bool update_wipe();
+
+public:
+  Led();
+  void init() override;
+  void loop() override;
+  void start(Mode mode, uint32_t duration, uint16_t payload = 0) override;
+  void set(uint8_t r, uint8_t g, uint8_t b) override;
+};

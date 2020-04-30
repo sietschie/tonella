@@ -1,9 +1,14 @@
+#pragma once
+
 #include "Arduino.h"
+#include "infc.h"
 
-#define NFC_TAG_UNCHANGED 0
-#define NFC_TAG_FOUND 1
-#define NFC_TAG_GONE 2
-
-bool readCard(char &type, int &index);
-byte checkCardStatus(char &type, int &index);
-bool nfc_init();
+/**
+ * nfc class controls nfc module
+ */
+class Nfc : public INfc {
+public:
+  bool readCard(Type &type, uint16_t &index) override;
+  TagState checkCardStatus(Type &type, uint16_t &index) override;
+  bool init() override;
+};
