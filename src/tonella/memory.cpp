@@ -2,7 +2,7 @@
 
 #include <EEPROM.h>
 
-byte memory_get_volume() {
+byte Memory::get_volume() {
   byte volume = EEPROM.read(0);
   if (volume > 30)
     volume = 30;
@@ -10,4 +10,4 @@ byte memory_get_volume() {
   return volume;
 }
 
-void memory_save_volume(byte volume) { EEPROM.update(0, volume); }
+void Memory::save_volume(byte volume) { EEPROM.update(0, volume); }
