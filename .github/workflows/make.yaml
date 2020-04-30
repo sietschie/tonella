@@ -44,12 +44,15 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Doxygen
+    - name: Install Doxygen
       run: |
           cd doc
-          wget http://doxygen.nl/files/doxygen-1.8.17.linux.bin.tar.gz
-          tar xvf doxygen-1.8.17.linux.bin.tar.gz
-          doxygen-1.8.17/bin/doxygen Doxyfile
+          wget http://doxygen.nl/files/doxygen-1.8.18.linux.bin.tar.gz
+          tar xvf doxygen-1.8.18.linux.bin.tar.gz
+    - name: Run Doxygen
+      run: |
+          cd doc
+          doxygen-1.8.18/bin/doxygen Doxyfile
 
   python-format:
     runs-on: ubuntu-latest
