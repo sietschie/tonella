@@ -58,4 +58,9 @@ uint8_t Player::get_volume() { return volume; }
 
 Player::Mode Player::get_mode() { return mode; }
 
-void Player::set_mode(Mode mode) { this->mode = mode; }
+void Player::change_to_next_mode() {
+  if (mode == Sound)
+    mode = Song;
+  else if (mode == Song)
+    mode = Sound;
+}

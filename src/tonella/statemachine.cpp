@@ -60,6 +60,6 @@ void StateMachine::execute_command(int index) {
     // Serial.print("Volume ");
     // Serial.println(player.get_volume());
   } else if (index == COMMAND_MODE_CHANGE) {
-    player->set_mode(1 - player->get_mode());
+    player->change_to_next_mode();
   }
 }
