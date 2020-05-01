@@ -26,13 +26,13 @@ void setup() {
   // Init LED
   Serial.print(F("Init LED: "));
   led.init();
-  led.set(1, 1, 1);
+  led.set(0, 0, 1);
   Serial.println(F("done"));
 
   Serial.print(F("Init NFC: "));
   if (!nfc.init()) {
     Serial.println(F("Communication failure"));
-    led.set(0, 0, 10); // show blue on error
+    led.set(0, 10, 10); // show cyan on error
     while (true)
       ;
   }
@@ -41,7 +41,7 @@ void setup() {
   Serial.print(F("Init Player: "));
   if (!player.init()) {
     Serial.println(F("failure"));
-    led.set(10, 0, 0); // show red on error
+    led.set(10, 10, 0); // show yellow on error
     while (true)
       ;
   }
@@ -49,6 +49,7 @@ void setup() {
 
   state_machine.init(&led, &nfc, &player);
 
+  led.set(1, 0, 0);
   led.start(Led::Mode::Breath, 2000);
   idle(2000);
 }
