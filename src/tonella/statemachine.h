@@ -3,6 +3,7 @@
 #include "iled.h"
 #include "infc.h"
 #include "iplayer.h"
+#include "isystem.h"
 
 #include <stdint.h>
 
@@ -21,10 +22,17 @@ class StateMachine {
   ILed *led;
   INfc *nfc;
   IPlayer *player;
+  ISystem *system;
 
-  void play_song(int index);
+  void play_song(uint16_t index);
   void stop_song();
-  void execute_command(int index);
+  void execute_command(uint16_t index);
+
+  bool command_periodically_active = false;
+  uint32_t command_start_time;
+  uint32_t command_last_active_time;
+  uint16_t command;
+  void execute_command_periodically();
 
 public:
   /**
@@ -33,8 +41,9 @@ public:
    * @param led     led module
    * @param nfc     nfc module
    * @param player  player module
+   * @param system  system module
    */
-  void init(ILed *led, INfc *nfc, IPlayer *player);
+  void init(ILed *led, INfc *nfc, IPlayer *player, ISystem *system);
 
   /** run one iteration of the state machine */
   void run();

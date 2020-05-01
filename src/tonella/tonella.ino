@@ -3,10 +3,12 @@
 #include "nfc.h"
 #include "player.h"
 #include "statemachine.h"
+#include "system.h"
 
 Player player;
 Nfc nfc;
 Led led;
+System sys;
 StateMachine state_machine;
 
 void tick() { led.loop(); }
@@ -47,7 +49,7 @@ void setup() {
   }
   Serial.println(F("done"));
 
-  state_machine.init(&led, &nfc, &player);
+  state_machine.init(&led, &nfc, &player, &sys);
 
   led.set(1, 0, 0);
   led.start(Led::Mode::Breath, 2000);

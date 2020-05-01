@@ -28,19 +28,28 @@ public:
   MOCK_METHOD(void, change_to_next_mode, (), (override));
 };
 
-using testing::_;
-using testing::Return;
-using testing::SetArgReferee;
+class MockSystem : public ISystem {
+public:
+  MOCK_METHOD(uint32_t, get_timestamp, (), (override));
+};
+
+using ::testing::_;
+using ::testing::Return;
+using ::testing::SetArgReferee;
 using ::testing::NiceMock;
+using ::testing::Ge;
+using ::testing::Le;
+
 
 
 TEST(StateMachine, PlaySong) {
   NiceMock<MockLED> led;
   MockNFC nfc;
   MockPlayer player;
+  NiceMock<MockSystem> system;
 
   StateMachine state_machine;
-  state_machine.init(&led, &nfc, &player);
+  state_machine.init(&led, &nfc, &player, &system);
 
   EXPECT_CALL(nfc, checkCardStatus(_,_))
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::FIGURINE), SetArgReferee<1>(1), Return(INfc::TagState::TAG_FOUND)));
@@ -55,9 +64,10 @@ TEST(StateMachine, StopSong) {
   NiceMock<MockLED> led;
   MockNFC nfc;
   MockPlayer player;
+  NiceMock<MockSystem> system;
 
   StateMachine state_machine;
-  state_machine.init(&led, &nfc, &player);
+  state_machine.init(&led, &nfc, &player, &system);
 
   EXPECT_CALL(nfc, checkCardStatus(_,_))
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::FIGURINE), SetArgReferee<1>(1), Return(INfc::TagState::TAG_FOUND)))
@@ -75,13 +85,14 @@ TEST(StateMachine, IncreaseVolume) {
   MockLED led;
   MockNFC nfc;
   MockPlayer player;
+  NiceMock<MockSystem> system;
 
   StateMachine state_machine;
-  state_machine.init(&led, &nfc, &player);
+  state_machine.init(&led, &nfc, &player, &system);
 
   EXPECT_CALL(nfc, checkCardStatus(_,_))
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::COMMAND), SetArgReferee<1>(2), Return(INfc::TagState::TAG_FOUND)));
-  EXPECT_CALL(player, set_volume(3));
+  EXPECT_CALL(player, set_volume(Ge(1)));
   EXPECT_CALL(led, start(_,_,_));
   EXPECT_CALL(player, get_volume())
       .WillRepeatedly(Return(0));
@@ -93,13 +104,14 @@ TEST(StateMachine, DecreaseVolume) {
   MockLED led;
   MockNFC nfc;
   MockPlayer player;
+  NiceMock<MockSystem> system;
 
   StateMachine state_machine;
-  state_machine.init(&led, &nfc, &player);
+  state_machine.init(&led, &nfc, &player, &system);
 
   EXPECT_CALL(nfc, checkCardStatus(_,_))
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::COMMAND), SetArgReferee<1>(1), Return(INfc::TagState::TAG_FOUND)));
-  EXPECT_CALL(player, set_volume(27));
+  EXPECT_CALL(player, set_volume(Le(29)));
   EXPECT_CALL(led, start(_,_,_));
   EXPECT_CALL(player, get_volume())
       .WillRepeatedly(Return(30));
@@ -111,9 +123,10 @@ TEST(StateMachine, ChangeMode) {
   MockLED led;
   MockNFC nfc;
   MockPlayer player;
+  NiceMock<MockSystem> system;
 
   StateMachine state_machine;
-  state_machine.init(&led, &nfc, &player);
+  state_machine.init(&led, &nfc, &player, &system);
 
   EXPECT_CALL(nfc, checkCardStatus(_,_))
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::COMMAND), SetArgReferee<1>(3), Return(INfc::TagState::TAG_FOUND)));
