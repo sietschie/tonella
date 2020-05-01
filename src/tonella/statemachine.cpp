@@ -18,6 +18,7 @@ void StateMachine::run() {
       if (type == INfc::Type::FIGURINE) {
         play_song(index);
         state = PLAYING;
+        led->set(0, 1, 0);
       } else if (type == INfc::Type::COMMAND) {
         execute_command(index);
         state = COMMAND;
@@ -28,11 +29,13 @@ void StateMachine::run() {
     if (nfc_status == INfc::TAG_GONE) {
       stop_song();
       state = IDLE;
+      led->set(1, 0, 0);
     };
     break;
   case COMMAND:
     if (nfc_status == INfc::TAG_GONE) {
       state = IDLE;
+      led->set(1, 0, 0);
     };
     break;
   };

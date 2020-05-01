@@ -11,6 +11,7 @@ class Led : public ILed {
 private:
   uint8_t pin;
   uint8_t num_pixels;
+  uint8_t r, g, b;
 
   Adafruit_NeoPixel pixels;
 
@@ -24,6 +25,8 @@ private:
   bool update_volume();
   bool update_blink();
   bool update_wipe();
+
+  void reset_pixels();
 
 public:
   Led();

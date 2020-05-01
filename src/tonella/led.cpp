@@ -18,7 +18,7 @@ void Led::start(Mode mode, uint32_t duration, uint16_t payload) {
 bool Led::update_breath() {
   unsigned long now = millis();
   if (now > time_start + time_duration) {
-    pixels.clear();
+    reset_pixels();
     pixels.show();
     return false;
   }
@@ -44,7 +44,7 @@ bool Led::update_breath() {
 bool Led::update_volume() {
   unsigned long now = millis();
   if (now > time_start + time_duration) {
-    pixels.clear();
+    reset_pixels();
     pixels.show();
     return false;
   }
@@ -67,7 +67,7 @@ bool Led::update_volume() {
 bool Led::update_blink() {
   unsigned long now = millis();
   if (now > time_start + time_duration) {
-    pixels.clear();
+    reset_pixels();
     pixels.show();
     return false;
   }
@@ -91,7 +91,7 @@ bool Led::update_blink() {
 bool Led::update_wipe() {
   unsigned long now = millis();
   if (now > time_start + time_duration) {
-    pixels.clear();
+    reset_pixels();
     pixels.show();
     return false;
   }
@@ -115,11 +115,16 @@ bool Led::update_wipe() {
 }
 
 void Led::set(byte r, byte g, byte b) {
+  this->r = r;
+  this->g = g;
+  this->b = b;
   for (int index_pixel = 0; index_pixel < num_pixels; index_pixel++) {
     pixels.setPixelColor(index_pixel, pixels.Color(r, g, b));
   }
   pixels.show();
 }
+
+void Led::reset_pixels() { set(r, g, b); }
 
 void Led::loop() {
   if (running) {
