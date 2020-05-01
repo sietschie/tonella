@@ -28,16 +28,32 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Get Version
+    - name: Compile
       run: |
           cd test/tonella/
-          cmake CMakeLists.txt
+          mkdir build
+          cd build
+          cmake ..
           make googletest
-          make
+          make runTests
+          make runTestsCov
     - name: Run
       run: |
-          cd test/tonella/
+          cd test/tonella/build
           ./runTests
+    - name: Code Coverage
+      run: |
+          sudo apt install lcov
+          cd test/tonella/build
+          ./runTestsCov
+          lcov -d CMakeFiles/runTestsCov.dir -c -o ex_test.info
+          lcov -r ex_test.info /usr/include/\* $PWD/include/gmock/\* $PWD/include/gtest/\* \*/test/tonella/\* -o ex_test_filtered.info
+          genhtml ex_test_filtered.info -o res
+    - uses: actions/upload-artifact@v1
+      with:
+        name: codeCoverageReport
+        path: test/tonella/build/res
+
   cpp-doc:
     runs-on: ubuntu-latest
 
@@ -46,13 +62,11 @@ jobs:
       uses: actions/checkout@v1
     - name: Install Doxygen
       run: |
-          cd doc
-          wget http://doxygen.nl/files/doxygen-1.8.18.linux.bin.tar.gz
-          tar xvf doxygen-1.8.18.linux.bin.tar.gz
+          sudo apt install doxygen
     - name: Run Doxygen
       run: |
           cd doc
-          doxygen-1.8.18/bin/doxygen Doxyfile
+          doxygen Doxyfile
 
   python-format:
     runs-on: ubuntu-latest
