@@ -20,6 +20,6 @@ public:
   void play(uint16_t index) override;
   void set_volume(uint8_t volume) override;
   uint8_t get_volume() override;
-  void set_mode(Mode mode) override;
   Mode get_mode() override;
+  void change_to_next_mode() override;
 };

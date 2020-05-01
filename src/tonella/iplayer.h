@@ -47,16 +47,12 @@ public:
   virtual uint8_t get_volume() = 0;
 
   /**
-   * sets current player mode
-   *
-   * @param mode  new mode
-   */
-  virtual void set_mode(Mode mode) = 0;
-
-  /**
    * return current player mode
    *
    * @returns current player mode
    */
   virtual Mode get_mode() = 0;
+
+  /** switches to next mode in rotating manner */
+  virtual void change_to_next_mode() = 0;
 };
