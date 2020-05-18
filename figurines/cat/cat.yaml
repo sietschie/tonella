@@ -1,0 +1,9 @@
+name: cat
+id: 4
+name_tts: Katze
+sound:
+    link: "https://www.youtube.com/watch?v=2VJt5ya5Szw"
+    selection: [0, 7]
+song:
+    link: "https://www.youtube.com/watch?v=DNCq_4CeDYY"
+    selection:

@@ -1,0 +1,9 @@
+name: snake
+id: 14
+name_tts: Klapperschlange
+sound:
+    link: "https://www.youtube.com/watch?v=ML4Cvr2gSfA"
+    selection: [8, 13]
+song:
+    link: "https://www.youtube.com/watch?v=uCHFfU7KBdw"
+    selection:

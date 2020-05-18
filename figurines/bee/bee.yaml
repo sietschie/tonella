@@ -1,0 +1,9 @@
+name: bee
+id: 2
+name_tts: Biene
+sound:
+    link: "https://www.youtube.com/watch?v=wKlkWUZTq_c"
+    selection: [20, 25]
+song:
+    link: "https://www.youtube.com/watch?v=XNWferBsNCw"
+    selection:

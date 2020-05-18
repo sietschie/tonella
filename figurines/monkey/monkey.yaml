@@ -1,0 +1,9 @@
+name: monkey
+id: 12
+name_tts: Affe
+sound:
+    link: "https://www.youtube.com/watch?v=1zGZUFd2w28"
+    selection: [0, 10]
+song:
+    link: "https://www.youtube.com/watch?v=u_uB1nbLOqE&t=2s"
+    selection:
