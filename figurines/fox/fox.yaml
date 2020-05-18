@@ -1,0 +1,9 @@
+name: fox
+id: 9
+name_tts: Fuchs
+sound:
+    link: "https://www.youtube.com/watch?v=RVOiv0IpDB8"
+    selection: [0, 9]
+song:
+    link: "https://www.youtube.com/watch?v=6FIqyOdYSvs"
+    selection:

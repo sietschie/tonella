@@ -1,0 +1,9 @@
+name: lion
+id: 11
+name_tts: Löwe
+sound:
+    link: "https://www.youtube.com/watch?v=ciF-p6CoRtw"
+    selection:
+song:
+    link: "https://www.youtube.com/watch?v=yxhEQ7ONDjQ"
+    selection:

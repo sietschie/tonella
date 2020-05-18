@@ -1,0 +1,9 @@
+name: cow
+id: 5
+name_tts: Kuh
+sound:
+    link: "https://www.youtube.com/watch?v=XCmW4l7nCEQ"
+    selection: [5, 11]
+song:
+    link: "https://www.youtube.com/watch?v=7IOzLT7A8jQ"
+    selection:

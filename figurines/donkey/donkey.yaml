@@ -1,0 +1,9 @@
+name: donkey
+id: 6
+name_tts: Esel
+sound:
+    link: "https://www.youtube.com/watch?v=lHgnIXDv5Is"
+    selection: [0, 10]
+song:
+    link: "https://www.youtube.com/watch?v=xuF0AGaUhb8"
+    selection: [7, 83]

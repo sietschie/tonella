@@ -1,0 +1,9 @@
+name: sheep
+id: 13
+name_tts: Schaf
+sound:
+    link: "https://www.youtube.com/watch?v=vXTyznfYqLA"
+    selection:
+song:
+    link: "https://www.youtube.com/watch?v=b6K3a_ug9JE"
+    selection: [10, 107]

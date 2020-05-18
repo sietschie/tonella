@@ -1,6 +1,9 @@
 name: bear
+id: 1
 name_tts: Bär
-sound: 
+sound:
     link: "https://www.youtube.com/watch?v=nMXX8XFqxq4"
+    selection:
 song:
     link: "https://www.youtube.com/watch?v=hmyEHUfXfsk"
+    selection:

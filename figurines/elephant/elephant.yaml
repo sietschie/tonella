@@ -1,0 +1,9 @@
+name: elephant
+id: 8
+name_tts: Elefant
+sound:
+    link: "https://www.youtube.com/watch?v=uAF63rrzE-w"
+    selection: [9, 21]
+song:
+    link: "https://www.youtube.com/watch?v=YB8hqFLRb5k"
+    selection:
