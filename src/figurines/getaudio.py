@@ -8,33 +8,40 @@ Generate mp3 with spoken name using tts. Normalize all mp3s.
 Combine name and sound into one mp3.
 """
 
-import sys
-import requests
 import json
+import os.path
+import argparse
+import requests
 
 import youtube_dl
 import pydub
 import yaml
 
 
-def main(path_to_config):
+def create_mp3s(path_to_config, path_src=".", path_dest="."):
     """Create figurine mp3s."""
     config = yaml.load(open(path_to_config, 'r'), Loader=yaml.BaseLoader)
 
+    name = get_name_from_tts(config['name_tts'], config['name'], path_src)
     sound = get_from_youtube(config['sound']['link'],
                              config['name'] + '-sound',
-                             config['sound']['selection'])
-    song = get_from_youtube(config['song']['link'],
-                            config['name'] + '-song',
-                            config['song']['selection'])
-    name = get_name_from_tts(config['name_tts'], config['name'])
+                             config['sound']['selection'],
+                             path_src)
     silence = pydub.AudioSegment.silent(duration=500)
 
-    nameandsound = name_norm + silence + sound_norm
-    nameandsound.export(name_file + "-nameandsound.mp3", format="mp3")
+    prefix = "%03d-" % (int(config['id'])) + config['name']
+
+    nameandsound = name + silence + sound
+    nameandsound.export(os.path.join(path_dest, prefix + "-nameandsound.mp3"))
+
+    song = get_from_youtube(config['song']['link'],
+                            config['name'] + '-song',
+                            config['song']['selection'],
+                            path_src)
+    song.export(os.path.join(path_dest, prefix + '-song.mp3'))
 
 
-def get_from_youtube(link, name, selection):
+def get_from_youtube(link, name, selection, path_src):
     """
     Download mp3 from youtube.
 
@@ -45,27 +52,34 @@ def get_from_youtube(link, name, selection):
     name -- prefix of mp3 filename
     selection -- list with start end endpoint in seconds
     """
-    download_from_youtube(link, name + '.mp3')
-    sound = pydub.AudioSegment.from_file(name + '.mp3')
+    filename = os.path.join(path_src, name)
+    if not os.path.isfile(filename + ".mp3"):
+        download_from_youtube(link, filename)
+    else:
+        print("%s already exists, skip downloading" % (filename + ".mp3"))
+
+    sound = pydub.AudioSegment.from_file(filename + '.mp3')
     if selection:
-        sound = sound[selection[0] * 1000: selection[1] * 1000]
-    sound_norm_filename = name + "-normalized.mp3"
+        sound = sound[int(selection[0]) * 1000: int(selection[1]) * 1000]
     sound_norm = match_target_amplitude(sound, -20.0)
-    sound_norm.export(sound_norm_filename, format="mp3")
     return sound_norm
 
 
-def get_name_from_tts(name_tts, name):
+def get_name_from_tts(name_tts, name_file, path_src):
     """
     Convert text to speech mp3.
 
     name_tts -- text to be spoken by the tts engine
-    name -- prefix for the mp3 file
+    name_file -- prefix for the mp3 file
     """
-    download_name(name_tts, name + '-name.mp3')
-    name = pydub.AudioSegment.from_file(name + '-name.mp3')
+    filename = os.path.join(path_src, name_file + '-name.mp3')
+    if not os.path.isfile(filename):
+        download_name(name_tts, filename)
+    else:
+        print("%s already exists, skip downloading" % filename)
+
+    name = pydub.AudioSegment.from_file(filename)
     name_norm = match_target_amplitude(name, -20.0)
-    name_norm.export(name_file + "-name-normalized.mp3", format="mp3")
     return name_norm
 
 
@@ -83,7 +97,7 @@ def download_from_youtube(link, filename):
             'preferredcodec': 'mp3',
             'preferredquality': '192',
         }],
-        'outtmpl': filename,
+        'outtmpl': filename + ".tmp",
     }
 
     youtube_dl.YoutubeDL(ydl_opts).download([link])
@@ -111,9 +125,9 @@ def download_name(name, filename):
     }
 
     data = {
-      'msg': name,
-      'lang': 'Vicki',
-      'source': 'ttsmp3'
+        'msg': name,
+        'lang': 'Vicki',
+        'source': 'ttsmp3'
     }
 
     response = requests.post('https://ttsmp3.com/makemp3_new.php',
@@ -124,20 +138,38 @@ def download_name(name, filename):
     open(filename, 'wb').write(myfile.content)
 
 
-def match_target_amplitude(sound, target_dBFS):
+def match_target_amplitude(sound, target_dbfs):
     """
     Normalize sound to specified dBFS value.
 
     sound -- input AudioSegment
     target_dBFS -- target volume
     """
-    change_in_dBFS = target_dBFS - sound.dBFS
-    print("change_in_dBFS = ", change_in_dBFS)
-    return sound.apply_gain(change_in_dBFS)
+    change_in_dbfs = target_dbfs - sound.dBFS
+    print("change_in_dBFS = ", change_in_dbfs)
+    return sound.apply_gain(change_in_dbfs)
+
+
+def main():
+    """Loop over all yaml files and creates mp3s."""
+    parser = argparse.ArgumentParser(
+                description='Create tonella mp3s ready for sd card')
+    parser.add_argument('path_to_yaml_file',
+                        help='yaml file with figurine config',
+                        nargs="+")
+    parser.add_argument('--path_src',
+                        help='folder where source mp3s are cached',
+                        default=".")
+    parser.add_argument('--path_dest',
+                        help='folder where final mp3s are saved',
+                        default=".")
+
+    args = parser.parse_args()
+
+    for yaml_file in args.path_to_yaml_file:
+        print("process %s" % yaml_file)
+        create_mp3s(yaml_file, args.path_src, args.path_dest)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        main(sys.argv[1])
-    else:
-        print("usage: {0} path_to_yaml_file".format(sys.argv[0]))
+    main()
