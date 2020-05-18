@@ -1,0 +1,8 @@
+*.log
+doc/latex
+doc/html
+*.swp
+*.swo
+*.hex
+*.elf
+applet
