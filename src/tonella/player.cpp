@@ -1,57 +1,36 @@
 #include "player.h"
 
-#include "SoftwareSerial.h"
-#include "memory.h"
+bool Player::init(IDFPlayer *_dfplayer, IMemory *_memory) {
+  dfplayer = _dfplayer;
+  memory = _memory;
 
-Memory memory;
-
-SoftwareSerial serialDfPlayer(2, 3); // RX, TX
-
-bool Player::init() {
-  // DFPlayer Mini
-
-  Serial.print(F("Init DFPlayer: "));
-  serialDfPlayer.begin(9600);
-
-  if (!myDFPlayer.begin(
-          serialDfPlayer)) { // Use softwareSerial to communicate with mp3.
-    Serial.println(F(""));
-    Serial.println(F("Unable to begin:"));
-    Serial.println(F("1.Please recheck the connection!"));
-    Serial.println(F("2.Please insert the SD card!"));
-    return false;
-  }
-  Serial.println(F("done"));
-
-  Serial.print(F("Read saved Volume: "));
-  volume = memory.get_volume();
-  myDFPlayer.volume(volume); // Set volume value. From 0 to 30
-  Serial.print("set volume to ");
-  Serial.println(volume);
+  volume = memory->get_volume();
+  dfplayer->set_volume(volume);
 
   return true;
 }
 
 void Player::play(uint16_t index) {
   if (mode == current_mode && index == current_track) {
-    myDFPlayer.start();
+    dfplayer->resume();
   } else if (mode == 0) {
-    myDFPlayer.playFolder(3, index);
+    dfplayer->play(3, index);
     current_mode = mode;
     current_track = index;
   } else {
-    myDFPlayer.playFolder(2, index);
+    dfplayer->play(2, index);
     current_mode = mode;
     current_track = index;
   }
 }
 
-void Player::pause() { myDFPlayer.pause(); }
+void Player::pause() { dfplayer->pause(); }
 
 void Player::set_volume(uint8_t _volume) {
   volume = _volume;
-  memory.save_volume(volume);
-  myDFPlayer.playFolder(1, 3);
+  memory->save_volume(volume);
+  dfplayer->set_volume(volume);
+  dfplayer->play(1, 3);
 }
 
 uint8_t Player::get_volume() { return volume; }

@@ -1,11 +1,15 @@
 #include "Arduino.h"
+#include "dfplayer.h"
 #include "led.h"
+#include "memory.h"
 #include "nfc.h"
 #include "player.h"
 #include "statemachine.h"
 #include "system.h"
 
+DFPlayer dfplayer;
 Player player;
+Memory memory;
 Nfc nfc;
 Led led;
 System sys;
@@ -41,7 +45,7 @@ void setup() {
   Serial.println(F("done"));
 
   Serial.print(F("Init Player: "));
-  if (!player.init()) {
+  if (!dfplayer.init() || !player.init(&dfplayer, &memory)) {
     Serial.println(F("failure"));
     led.set(10, 10, 0); // show yellow on error
     while (true)
