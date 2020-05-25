@@ -38,8 +38,11 @@ uint8_t Player::get_volume() { return volume; }
 Player::Mode Player::get_mode() { return mode; }
 
 void Player::change_to_next_mode() {
-  if (mode == Sound)
+  if (mode == Sound) {
     mode = Song;
-  else if (mode == Song)
+    dfplayer->play(1, 1);
+  } else if (mode == Song) {
     mode = Sound;
+    dfplayer->play(1, 2);
+  }
 }

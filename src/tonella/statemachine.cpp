@@ -90,6 +90,8 @@ void StateMachine::execute_command(uint16_t index) {
     // Serial.print("Volume ");
     // Serial.println(player.get_volume());
   } else if (index == COMMAND_MODE_CHANGE) {
+    led->set(0, 1, 0);
+    led->start(ILed::Mode::Wipe, 1010);
     player->change_to_next_mode();
   }
 }
