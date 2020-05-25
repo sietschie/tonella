@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Arduino.h"
-#include "DFRobotDFPlayerMini.h"
 #include "iplayer.h"
 
 /**
@@ -9,13 +7,14 @@
  */
 class Player : public IPlayer {
   int volume = 0;
-  DFRobotDFPlayerMini myDFPlayer;
+  IDFPlayer *dfplayer;
+  IMemory *memory;
   int current_mode = 0;
   int current_track = 0;
-  int mode = 0;
+  Mode mode = Song;
 
 public:
-  bool init() override;
+  bool init(IDFPlayer *dfplayer, IMemory *memory) override;
   void pause() override;
   void play(uint16_t index) override;
   void set_volume(uint8_t volume) override;

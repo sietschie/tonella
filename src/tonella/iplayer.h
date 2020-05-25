@@ -1,5 +1,8 @@
 #pragma once
 
+#include "idfplayer.h"
+#include "imemory.h"
+
 /**
  * interface to player class
  *
@@ -16,17 +19,20 @@ public:
   enum Mode { Sound, Song };
 
   /**
-   * initialize reader
+   * initialize player
+   *
+   * @param dfplayer  module to access dfplayer functions
+   * @param memory    module to access memory functions
    *
    * @returns true if initialized succesfully
    */
-  virtual bool init() = 0;
+  virtual bool init(IDFPlayer *dfplayer, IMemory *memory) = 0;
 
   /** pause current song */
   virtual void pause() = 0;
 
   /**
-   * pause current song
+   * play song according to current mode
    *
    * @param index   index of song to play
    */

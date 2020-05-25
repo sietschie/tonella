@@ -1,4 +1,5 @@
 #include "statemachine.cpp"
+#include "player.cpp"
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -17,9 +18,24 @@ public:
   MOCK_METHOD(bool, init, (), (override));
 };
 
-class MockPlayer : public IPlayer {
+class MockDFPlayer : public IDFPlayer {
 public:
   MOCK_METHOD(bool, init, (), (override));
+  MOCK_METHOD(void, pause, (), (override));
+  MOCK_METHOD(void, resume, (), (override));
+  MOCK_METHOD(void, play, (uint16_t folder, uint16_t index), (override));
+  MOCK_METHOD(void, set_volume, (uint8_t volume), (override));
+};
+
+class MockMemory : public IMemory {
+public:
+  MOCK_METHOD(uint8_t, get_volume, (), (override));
+  MOCK_METHOD(void, save_volume, (uint8_t volume), (override));
+};
+
+class MockPlayer : public IPlayer {
+public:
+  MOCK_METHOD(bool, init, (IDFPlayer* dfplayer, IMemory* memory), (override));
   MOCK_METHOD(void, pause, (), (override));
   MOCK_METHOD(void, play, (uint16_t index), (override));
   MOCK_METHOD(void, set_volume, (uint8_t volume), (override));
@@ -133,6 +149,18 @@ TEST(StateMachine, ChangeMode) {
   EXPECT_CALL(player, change_to_next_mode());
 
   state_machine.run();
+}
+
+TEST(Player, SetVolume) {
+  NiceMock<MockDFPlayer> dfplayer;
+  NiceMock<MockMemory> memory;
+
+  Player player;
+  player.init(&dfplayer, &memory);
+
+  EXPECT_CALL(dfplayer, set_volume(20));
+  EXPECT_CALL(memory, save_volume(20));
+  player.set_volume(20);
 }
 
 int main(int argc, char **argv) {
