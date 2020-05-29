@@ -37,6 +37,7 @@ void StateMachine::run() {
   case COMMAND:
     if (nfc_status == INfc::TAG_GONE) {
       state = IDLE;
+      player->stop();
       command_periodically_active = false;
       led->set(1, 0, 0);
     } else {

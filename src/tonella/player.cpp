@@ -25,6 +25,10 @@ void Player::play(uint16_t index) {
 }
 
 void Player::pause() { dfplayer->pause(); }
+void Player::stop() {
+  dfplayer->pause();
+  current_track = 0;
+}
 
 void Player::set_volume(uint8_t _volume) {
   volume = _volume;
