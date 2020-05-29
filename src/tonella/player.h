@@ -16,6 +16,7 @@ class Player : public IPlayer {
 public:
   bool init(IDFPlayer *dfplayer, IMemory *memory) override;
   void pause() override;
+  void stop() override;
   void play(uint16_t index) override;
   void set_volume(uint8_t volume) override;
   uint8_t get_volume() override;

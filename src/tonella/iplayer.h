@@ -31,6 +31,9 @@ public:
   /** pause current song */
   virtual void pause() = 0;
 
+  /** stop current song */
+  virtual void stop() = 0;
+
   /**
    * play song according to current mode
    *
