@@ -1,8 +1,10 @@
 #include "Arduino.h"
 #include "dfplayer.h"
 #include "led.h"
+#include "logger.h"
 #include "memory.h"
 #include "nfc.h"
+#include "nulllogger.h"
 #include "player.h"
 #include "statemachine.h"
 #include "system.h"
@@ -14,6 +16,7 @@ Nfc nfc;
 Led led;
 System sys;
 StateMachine state_machine;
+Logger logger(ILogger::Info);
 
 void tick() { led.loop(); }
 
@@ -27,33 +30,32 @@ void idle(uint16_t sleep) {
 }
 
 void setup() {
-  Serial.begin(115200);
+  // Init logger
+  logger.init();
 
   // Init LED
-  Serial.print(F("Init LED: "));
+  logger.print(ILogger::Info, "Init LED: ");
   led.init();
   led.set(0, 0, 1);
-  Serial.println(F("done"));
+  logger.println(ILogger::Info, "done");
 
-  Serial.print(F("Init NFC: "));
+  logger.print(ILogger::Info, "Init NFC: ");
   if (!nfc.init()) {
-    Serial.println(F("Communication failure"));
+    logger.println(ILogger::Info, "Communication failure");
     led.set(0, 10, 10); // show cyan on error
     while (true)
       ;
   }
-  Serial.println(F("done"));
+  logger.println(ILogger::Info, "done");
 
-  Serial.print(F("Init Player: "));
   if (!dfplayer.init() || !player.init(&dfplayer, &memory)) {
     Serial.println(F("failure"));
     led.set(10, 10, 0); // show yellow on error
     while (true)
       ;
   }
-  Serial.println(F("done"));
 
-  state_machine.init(&led, &nfc, &player, &sys);
+  state_machine.init(&led, &nfc, &player, &sys, &logger);
 
   led.set(1, 0, 0);
   led.start(Led::Mode::Breath, 2000);
