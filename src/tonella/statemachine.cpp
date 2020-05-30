@@ -1,11 +1,12 @@
 #include "statemachine.h"
 
 void StateMachine::init(ILed *_led, INfc *_nfc, IPlayer *_player,
-                        ISystem *_system) {
+                        ISystem *_system, ILogger *_logger) {
   led = _led;
   nfc = _nfc;
   player = _player;
   system = _system;
+  logger = _logger;
 }
 
 void StateMachine::run() {
@@ -20,10 +21,12 @@ void StateMachine::run() {
       if (type == INfc::Type::FIGURINE) {
         play_song(index);
         state = PLAYING;
+        logger->println(ILogger::Info, "changed state from IDLE to PLAYING");
         led->set(0, 1, 0);
       } else if (type == INfc::Type::COMMAND) {
         execute_command(index);
         state = COMMAND;
+        logger->println(ILogger::Info, "changed state from IDLE to COMMAND");
       }
     }
     break;
@@ -31,12 +34,14 @@ void StateMachine::run() {
     if (nfc_status == INfc::TAG_GONE) {
       stop_song();
       state = IDLE;
+      logger->println(ILogger::Info, "changed state from PLAYING to IDLE");
       led->set(1, 0, 0);
     };
     break;
   case COMMAND:
     if (nfc_status == INfc::TAG_GONE) {
       state = IDLE;
+      logger->println(ILogger::Info, "changed state from COMMAND to IDLE");
       player->stop();
       command_periodically_active = false;
       led->set(1, 0, 0);

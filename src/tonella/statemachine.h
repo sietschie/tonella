@@ -1,6 +1,7 @@
 #pragma once
 
 #include "iled.h"
+#include "ilogger.h"
 #include "infc.h"
 #include "iplayer.h"
 #include "isystem.h"
@@ -23,6 +24,7 @@ class StateMachine {
   INfc *nfc;
   IPlayer *player;
   ISystem *system;
+  ILogger *logger;
 
   void play_song(uint16_t index);
   void stop_song();
@@ -42,8 +44,10 @@ public:
    * @param nfc     nfc module
    * @param player  player module
    * @param system  system module
+   * @param logger  logger module
    */
-  void init(ILed *led, INfc *nfc, IPlayer *player, ISystem *system);
+  void init(ILed *led, INfc *nfc, IPlayer *player, ISystem *system,
+            ILogger *logger);
 
   /** run one iteration of the state machine */
   void run();
