@@ -37,8 +37,7 @@ void StateMachine::run() {
       state = IDLE;
       logger->println(ILogger::Info, "changed state from PLAYING to IDLE");
       led->set(1, 0, 0);
-    };
-    if (play_state == 0) {
+    } else if (play_state == 0) {
       state = DONE;
       logger->println(ILogger::Info, "changed state from PLAYING to DONE");
       led->set(1, 1, 0);
@@ -51,6 +50,7 @@ void StateMachine::run() {
       logger->println(ILogger::Info, "changed state from DONE to IDLE");
       led->set(1, 0, 0);
     };
+    break;
   case COMMAND:
     if (nfc_status == INfc::TAG_GONE) {
       state = IDLE;
@@ -81,7 +81,7 @@ void StateMachine::execute_command_periodically() {
   uint32_t current_time = system->get_timestamp();
 
   int32_t time_diff = current_time - command_last_active_time;
-  if (time_diff > 100) {
+  if (time_diff > 500) {
     command_last_active_time = current_time;
     execute_command(command);
   }
@@ -89,25 +89,41 @@ void StateMachine::execute_command_periodically() {
 
 void StateMachine::execute_command(uint16_t index) {
   if (index == COMMAND_VOLUME_UP_ID) {
-    player->set_volume(player->get_volume() + 1);
-    led->start(ILed::Mode::Volume, 1010, player->get_volume() - 6);
+    uint8_t current_volume = player->get_volume();
+    if (current_volume >= 30)
+      return;
 
-    command_start_time = system->get_timestamp() + 500;
-    command_last_active_time = system->get_timestamp() + 500;
-    command_periodically_active = true;
-    command = index;
-    // Serial.print("Volume ");
-    // Serial.println(player.get_volume());
+    uint8_t new_volume = current_volume + 1;
+    player->set_volume(new_volume);
+    led->start(ILed::Mode::Volume, 1010, new_volume - 6);
+
+    if (!command_periodically_active) {
+      command_start_time = system->get_timestamp() + 500;
+      command_last_active_time = command_start_time;
+      command_periodically_active = true;
+      command = index;
+    }
+    logger->print(ILogger::Debug, "Volume ");
+    logger->print(ILogger::Debug, (int)new_volume);
+    logger->println(ILogger::Debug);
   } else if (index == COMMAND_VOLUME_DOWN_ID) {
-    player->set_volume(player->get_volume() - 1);
-    led->start(ILed::Mode::Volume, 1010, player->get_volume() - 6);
+    uint8_t current_volume = player->get_volume();
+    if (current_volume <= 7)
+      return;
 
-    command_start_time = system->get_timestamp() + 500;
-    command_last_active_time = system->get_timestamp() + 500;
-    command_periodically_active = true;
-    command = index;
-    // Serial.print("Volume ");
-    // Serial.println(player.get_volume());
+    uint8_t new_volume = current_volume - 1;
+    player->set_volume(new_volume);
+    led->start(ILed::Mode::Volume, 1010, new_volume - 6);
+
+    if (!command_periodically_active) {
+      command_start_time = system->get_timestamp() + 500;
+      command_last_active_time = command_start_time;
+      command_periodically_active = true;
+      command = index;
+    }
+    logger->print(ILogger::Debug, "Volume ");
+    logger->print(ILogger::Debug, (int)new_volume);
+    logger->println(ILogger::Debug);
   } else if (index == COMMAND_MODE_CHANGE) {
     led->set(0, 1, 0);
     led->start(ILed::Mode::Wipe, 1010);
