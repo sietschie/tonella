@@ -13,7 +13,7 @@
  */
 class StateMachine {
   uint8_t state = IDLE;
-  enum State_enum { IDLE, PLAYING, COMMAND };
+  enum State_enum { IDLE, PLAYING, DONE, COMMAND };
   enum Command_enum {
     COMMAND_VOLUME_DOWN_ID = 1,
     COMMAND_VOLUME_UP_ID = 2,

@@ -14,6 +14,7 @@ void StateMachine::run() {
   INfc::Type type;
 
   INfc::TagState nfc_status = nfc->checkCardStatus(type, index);
+  uint8_t play_state = system->get_play_state();
 
   switch (state) {
   case IDLE:
@@ -37,7 +38,19 @@ void StateMachine::run() {
       logger->println(ILogger::Info, "changed state from PLAYING to IDLE");
       led->set(1, 0, 0);
     };
+    if (play_state == 0) {
+      state = DONE;
+      logger->println(ILogger::Info, "changed state from PLAYING to DONE");
+      led->set(1, 1, 0);
+    }
     break;
+  case DONE:
+    if (nfc_status == INfc::TAG_GONE) {
+      stop_song();
+      state = IDLE;
+      logger->println(ILogger::Info, "changed state from DONE to IDLE");
+      led->set(1, 0, 0);
+    };
   case COMMAND:
     if (nfc_status == INfc::TAG_GONE) {
       state = IDLE;
