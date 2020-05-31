@@ -16,7 +16,7 @@ Nfc nfc;
 Led led;
 System sys;
 StateMachine state_machine;
-Logger logger(ILogger::Info);
+Logger logger(ILogger::Debug);
 
 void tick() { led.loop(); }
 

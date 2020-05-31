@@ -13,7 +13,7 @@ bool Player::init(IDFPlayer *_dfplayer, IMemory *_memory) {
 void Player::play(uint16_t index) {
   if (mode == current_mode && index == current_track) {
     dfplayer->resume();
-  } else if (mode == 0) {
+  } else if (mode == Sound) {
     dfplayer->play(3, index);
     current_mode = mode;
     current_track = index;
