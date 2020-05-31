@@ -137,7 +137,6 @@ jobs:
           arduino-cli lib install MFRC522
           arduino-cli lib install DFRobotDFPlayerMini
           arduino-cli lib install "Adafruit NeoPixel"
-          git clone https://github.com/aroller/NDEF-MFRC522.git ../../../Arduino/libraries/NDEF-MFRC522
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
