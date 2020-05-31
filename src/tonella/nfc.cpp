@@ -1,7 +1,6 @@
 #include "nfc.h"
 
 #include <MFRC522.h>
-#include <MifareUltralight.h>
 
 // NFC Board
 #define RST_PIN 9                 // Configurable, see typical pin layout above
@@ -12,6 +11,7 @@ bool rfid_tag_present_prev = false;
 bool rfid_tag_present = false;
 int _rfid_error_counter = 0;
 bool _tag_found = false;
+#define ULTRALIGHT_DATA_START_PAGE 4
 
 bool Nfc::init() {
   // Init NFC
@@ -33,34 +33,47 @@ bool Nfc::init() {
 }
 
 bool Nfc::readCard(Type &type, uint16_t &index) {
+  byte ultraLightReadSize = 18;
+  byte data[ultraLightReadSize];
+  byte size = ultraLightReadSize;
+  int status = mfrc522.MIFARE_Read(ULTRALIGHT_DATA_START_PAGE, data, &size);
 
-  ndef_mfrc522::MifareUltralight reader =
-      ndef_mfrc522::MifareUltralight(mfrc522);
-  ndef_mfrc522::NfcTag tag = reader.read();
-  ndef_mfrc522::NdefMessage msg = tag.getNdefMessage();
+  int messageLength = 0;
+  int messageStart = 0;
+  if (status == MFRC522::StatusCode::STATUS_OK) {
+    if (data[0] == 0x03) {
+      messageLength = data[1];
+    } else if (data[5] == 0x03) {
+      messageLength = data[6];
+      messageStart = 5;
+    }
+  }
 
-  if (msg.getRecordCount() < 3) {
-    Serial.println("NFC: Not enough records found on rfid chip");
-    type = 'e';
-    index = 1;
+  byte recordLength = data[messageStart + 4];
+
+  if (data[messageStart + 2] != 0x91 || data[messageStart + 3] != 0x01) {
+    Serial.print("type does not match: ");
+    Serial.print(data[messageStart + 2], HEX);
+    Serial.print(" ");
+    Serial.print(data[messageStart + 3], HEX);
+    Serial.println(" (expected 91 and 1)");
     return false;
   }
 
-  ndef_mfrc522::NdefRecord rcd = msg.getRecord(0);
-  char bufferType[2];
-  rcd.getType(bufferType);
-  if (bufferType[0] != 0x54) {
-    Serial.println("NFC: Unexpected record type");
-    type = 'e';
-    index = 2;
+  if (messageStart + recordLength + 6 >= ultraLightReadSize) {
+    Serial.println("record ends beyond buffer size");
     return false;
   }
 
-  // read and parse record 0
-  byte payload[rcd.getPayloadLength() + 1];
-  rcd.getPayload(payload);
+  // get payload
+  data[messageStart + recordLength + 6] = '\0';
+  char *payload = (char *)data + messageStart + 7;
 
-  switch (payload[3]) {
+  Serial.print("read card payload = ");
+  Serial.println(payload);
+
+  // parse payload
+  switch (payload[2]) {
   case 'F':
     type = INfc::Type::FIGURINE;
     break;
@@ -69,18 +82,8 @@ bool Nfc::readCard(Type &type, uint16_t &index) {
     break;
   }
 
-  payload[rcd.getPayloadLength()] = '\0'; // add zero termination
-  String id((char *)payload + 4);
+  String id((char *)payload + 3);
   index = id.toInt();
-
-  {
-    ndef_mfrc522::NdefRecord rcd = msg.getRecord(1);
-    byte payload[rcd.getPayloadLength() + 1];
-    rcd.getPayload(payload);
-    payload[rcd.getPayloadLength()] = '\0'; // add zero termination
-    String figurineName((char *)payload + 3);
-    Serial.println(figurineName);
-  }
 
   return true;
 }
