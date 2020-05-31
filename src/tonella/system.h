@@ -8,5 +8,7 @@
  */
 class System : public ISystem {
 public:
-  uint32_t get_timestamp();
+  void init() override;
+  uint32_t get_timestamp() override;
+  uint8_t get_play_state() override;
 };

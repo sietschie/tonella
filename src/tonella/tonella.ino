@@ -30,7 +30,7 @@ void idle(uint16_t sleep) {
 }
 
 void setup() {
-  // Init logger
+  sys.init();
   logger.init();
 
   // Init LED
