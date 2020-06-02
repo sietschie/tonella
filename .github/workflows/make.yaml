@@ -146,7 +146,7 @@ jobs:
       - name: Copy binaries
         run: |
             mkdir build
-            cp src/tonella/tonella.ino.arduino.* build/
+            cp /tmp/arduino-sketch-*/tonella.ino.* build/
 
       - uses: actions/upload-artifact@v1
         with:
