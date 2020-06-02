@@ -2,6 +2,8 @@
 
 """Create beep sound effect for volume change feedback."""
 
+import argparse
+import os.path
 from scipy.io.wavfile import write
 from scipy.signal import convolve
 import scipy.signal
@@ -50,8 +52,23 @@ def create_beep(duration):
     return tone_enveloped
 
 
-beep1 = create_beep(0.5)
-beep2 = create_beep(1.0)
+def main():
+    """Create beep sounds and save to wav file."""
+    parser = argparse.ArgumentParser(
+                description='Create beep sounds and save to wav file.')
+    parser.add_argument('--path_dest',
+                        help='folder where final wavs are saved',
+                        default=".")
 
-write('003-beep.wav', 44100, beep1)
-write('004-beeps.wav', 44100, np.concatenate([beep2] + [beep1]*30))
+    args = parser.parse_args()
+
+    beep1 = create_beep(0.5)
+    beep2 = create_beep(1.0)
+    beeps = np.concatenate([beep2] + [beep1]*30)
+
+    write(os.path.join(args.path_dest, '003-beep.wav'), 44100, beep1)
+    write(os.path.join(args.path_dest, '004-beeps.wav'), 44100, beeps)
+
+
+if __name__ == "__main__":
+    main()
