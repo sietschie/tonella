@@ -57,7 +57,6 @@ void StateMachine::run() {
       logger->println(ILogger::Info, "changed state from COMMAND to IDLE");
       player->stop();
       command_periodically_active = false;
-      led->set(1, 0, 0);
     } else {
       if (command_periodically_active) {
         execute_command_periodically();
@@ -90,36 +89,42 @@ void StateMachine::execute_command_periodically() {
 void StateMachine::execute_command(uint16_t index) {
   if (index == COMMAND_VOLUME_UP_ID) {
     uint8_t current_volume = player->get_volume();
-    if (current_volume >= 30)
+    if (current_volume >= 30) {
+      player->stop();
       return;
+    }
 
     uint8_t new_volume = current_volume + 1;
     player->set_volume(new_volume);
-    led->start(ILed::Mode::Volume, 1010, new_volume - 6);
+    led->start(ILed::Mode::Volume, 1510, new_volume - 6);
 
     if (!command_periodically_active) {
       command_start_time = system->get_timestamp() + 500;
       command_last_active_time = command_start_time;
       command_periodically_active = true;
       command = index;
+      player->play_beeps();
     }
     logger->print(ILogger::Debug, "Volume ");
     logger->print(ILogger::Debug, (int)new_volume);
     logger->println(ILogger::Debug);
   } else if (index == COMMAND_VOLUME_DOWN_ID) {
     uint8_t current_volume = player->get_volume();
-    if (current_volume <= 7)
+    if (current_volume <= 7) {
+      player->stop();
       return;
+    }
 
     uint8_t new_volume = current_volume - 1;
     player->set_volume(new_volume);
-    led->start(ILed::Mode::Volume, 1010, new_volume - 6);
+    led->start(ILed::Mode::Volume, 1510, new_volume - 6);
 
     if (!command_periodically_active) {
       command_start_time = system->get_timestamp() + 500;
       command_last_active_time = command_start_time;
       command_periodically_active = true;
       command = index;
+      player->play_beeps();
     }
     logger->print(ILogger::Debug, "Volume ");
     logger->print(ILogger::Debug, (int)new_volume);

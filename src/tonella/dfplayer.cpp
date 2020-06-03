@@ -25,6 +25,8 @@ bool DFPlayer::init() {
 
 void DFPlayer::pause() { myDFPlayer.pause(); }
 
+void DFPlayer::stop() { myDFPlayer.stop(); }
+
 void DFPlayer::resume() { myDFPlayer.start(); }
 
 void DFPlayer::play(uint16_t folder, uint16_t index) {
