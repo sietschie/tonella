@@ -36,16 +36,18 @@ def envelope(tone, attack, decay, sustain, rate=44100):
 
     return (np.concatenate([a, d, s]) * tone).astype('int16')
 
+
 def create_beep(duration):
-  tone = note_square(440, duration, amp=20000)
+    """Create beep sound."""
+    tone = note_square(440, duration, amp=20000)
 
-  gaussian = scipy.signal.windows.gaussian(50, 3)
-  gaussian_norm = gaussian / np.sum(gaussian)
-  tone_lowpass = convolve(tone, gaussian_norm)
+    gaussian = scipy.signal.windows.gaussian(50, 3)
+    gaussian_norm = gaussian / np.sum(gaussian)
+    tone_lowpass = convolve(tone, gaussian_norm)
 
-  tone_enveloped = envelope(tone_lowpass, 0.05, 0.3, 0.0)
+    tone_enveloped = envelope(tone_lowpass, 0.05, 0.3, 0.0)
 
-  return tone_enveloped
+    return tone_enveloped
 
 
 beep1 = create_beep(0.5)
