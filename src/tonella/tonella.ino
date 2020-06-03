@@ -36,7 +36,7 @@ void setup() {
   // Init LED
   logger.print(ILogger::Info, "Init LED: ");
   led.init();
-  led.set(0, 0, 1);
+  led.set(1, 1, 1);
   logger.println(ILogger::Info, "done");
 
   logger.print(ILogger::Info, "Init NFC: ");

@@ -30,10 +30,6 @@ void DFPlayer::stop() { myDFPlayer.stop(); }
 void DFPlayer::resume() { myDFPlayer.start(); }
 
 void DFPlayer::play(uint16_t folder, uint16_t index) {
-  Serial.print("play ");
-  Serial.print(folder);
-  Serial.print(" ");
-  Serial.println(index);
   myDFPlayer.playFolder(folder, index);
 }
 

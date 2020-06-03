@@ -1,5 +1,4 @@
 #include "statemachine.h"
-#include "Arduino.h"
 
 void StateMachine::init(ILed *_led, INfc *_nfc, IPlayer *_player,
                         ISystem *_system, ILogger *_logger) {
@@ -58,7 +57,6 @@ void StateMachine::run() {
       logger->println(ILogger::Info, "changed state from COMMAND to IDLE");
       player->stop();
       command_periodically_active = false;
-      led->set(1, 0, 0);
     } else {
       if (command_periodically_active) {
         execute_command_periodically();
@@ -80,8 +78,6 @@ void StateMachine::stop_song() {
 
 void StateMachine::execute_command_periodically() {
   uint32_t current_time = system->get_timestamp();
-  Serial.print("execute command periodically, time = ");
-  Serial.println(current_time);
 
   int32_t time_diff = current_time - command_last_active_time;
   if (time_diff > 500) {
@@ -101,7 +97,7 @@ void StateMachine::execute_command(uint16_t index) {
 
     uint8_t new_volume = current_volume + 1;
     player->set_volume(new_volume);
-    led->start(ILed::Mode::Volume, 1210, new_volume - 6);
+    led->start(ILed::Mode::Volume, 1510, new_volume - 6);
 
     if (!command_periodically_active) {
       command_start_time = system->get_timestamp() + 500;
@@ -123,7 +119,7 @@ void StateMachine::execute_command(uint16_t index) {
 
     uint8_t new_volume = current_volume - 1;
     player->set_volume(new_volume);
-    led->start(ILed::Mode::Volume, 1210, new_volume - 6);
+    led->start(ILed::Mode::Volume, 1510, new_volume - 6);
 
     if (!command_periodically_active) {
       command_start_time = system->get_timestamp() + 500;

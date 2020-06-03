@@ -1,5 +1,4 @@
 #include "player.h"
-#include "Arduino.h"
 
 bool Player::init(IDFPlayer *_dfplayer, IMemory *_memory) {
   dfplayer = _dfplayer;
@@ -36,8 +35,6 @@ void Player::stop() {
 void Player::set_volume(uint8_t _volume) {
   volume = _volume;
   memory->save_volume(volume);
-  //dfplayer->stop();
-  //dfplayer->play(1, 3);
   dfplayer->set_volume(volume);
 }
 
