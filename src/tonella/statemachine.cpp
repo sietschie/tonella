@@ -89,8 +89,7 @@ void StateMachine::execute_command_periodically() {
 void StateMachine::execute_command(uint16_t index) {
   if (index == COMMAND_VOLUME_UP_ID) {
     uint8_t current_volume = player->get_volume();
-    if (current_volume >= 30)
-    {
+    if (current_volume >= 30) {
       player->stop();
       return;
     }
@@ -111,8 +110,7 @@ void StateMachine::execute_command(uint16_t index) {
     logger->println(ILogger::Debug);
   } else if (index == COMMAND_VOLUME_DOWN_ID) {
     uint8_t current_volume = player->get_volume();
-    if (current_volume <= 7)
-    {
+    if (current_volume <= 7) {
       player->stop();
       return;
     }
