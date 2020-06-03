@@ -25,9 +25,10 @@ void Player::play(uint16_t index) {
 }
 
 void Player::pause() { dfplayer->pause(); }
+
 void Player::play_beeps() { dfplayer->play(1, 4); }
+
 void Player::stop() {
-  Serial.println("player->stop()");
   dfplayer->pause();
   current_track = 0;
 }

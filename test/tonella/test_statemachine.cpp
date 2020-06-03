@@ -75,6 +75,7 @@ TEST(StateMachine, IncreaseVolume) {
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::COMMAND),
                       SetArgReferee<1>(2), Return(INfc::TagState::TAG_FOUND)));
   EXPECT_CALL(player, set_volume(Ge(1)));
+  EXPECT_CALL(player, play_beeps());
   EXPECT_CALL(led, start(_, _, _));
   EXPECT_CALL(player, get_volume()).WillRepeatedly(Return(0));
 
@@ -95,6 +96,7 @@ TEST(StateMachine, DecreaseVolume) {
       .WillOnce(DoAll(SetArgReferee<0>(INfc::Type::COMMAND),
                       SetArgReferee<1>(1), Return(INfc::TagState::TAG_FOUND)));
   EXPECT_CALL(player, set_volume(Le(29)));
+  EXPECT_CALL(player, play_beeps());
   EXPECT_CALL(led, start(_, _, _));
   EXPECT_CALL(player, get_volume()).WillRepeatedly(Return(30));
 
@@ -116,6 +118,7 @@ TEST(StateMachine, MaxVolume) {
                       SetArgReferee<1>(2), Return(INfc::TagState::TAG_FOUND)));
   EXPECT_CALL(player, set_volume(_)).Times(0);
   EXPECT_CALL(player, get_volume()).WillRepeatedly(Return(30));
+  EXPECT_CALL(player, stop());
 
   state_machine.run();
 }
@@ -135,6 +138,7 @@ TEST(StateMachine, MinVolume) {
                       SetArgReferee<1>(1), Return(INfc::TagState::TAG_FOUND)));
   EXPECT_CALL(player, set_volume(_)).Times(0);
   EXPECT_CALL(player, get_volume()).WillRepeatedly(Return(7));
+  EXPECT_CALL(player, stop());
 
   state_machine.run();
 }
