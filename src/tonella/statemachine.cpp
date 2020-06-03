@@ -1,4 +1,5 @@
 #include "statemachine.h"
+#include "Arduino.h"
 
 void StateMachine::init(ILed *_led, INfc *_nfc, IPlayer *_player,
                         ISystem *_system, ILogger *_logger) {
@@ -79,6 +80,8 @@ void StateMachine::stop_song() {
 
 void StateMachine::execute_command_periodically() {
   uint32_t current_time = system->get_timestamp();
+  Serial.print("execute command periodically, time = ");
+  Serial.println(current_time);
 
   int32_t time_diff = current_time - command_last_active_time;
   if (time_diff > 500) {
@@ -91,17 +94,21 @@ void StateMachine::execute_command(uint16_t index) {
   if (index == COMMAND_VOLUME_UP_ID) {
     uint8_t current_volume = player->get_volume();
     if (current_volume >= 30)
+    {
+      player->stop();
       return;
+    }
 
     uint8_t new_volume = current_volume + 1;
     player->set_volume(new_volume);
-    led->start(ILed::Mode::Volume, 1010, new_volume - 6);
+    led->start(ILed::Mode::Volume, 1210, new_volume - 6);
 
     if (!command_periodically_active) {
       command_start_time = system->get_timestamp() + 500;
       command_last_active_time = command_start_time;
       command_periodically_active = true;
       command = index;
+      player->play_beeps();
     }
     logger->print(ILogger::Debug, "Volume ");
     logger->print(ILogger::Debug, (int)new_volume);
@@ -109,17 +116,21 @@ void StateMachine::execute_command(uint16_t index) {
   } else if (index == COMMAND_VOLUME_DOWN_ID) {
     uint8_t current_volume = player->get_volume();
     if (current_volume <= 7)
+    {
+      player->stop();
       return;
+    }
 
     uint8_t new_volume = current_volume - 1;
     player->set_volume(new_volume);
-    led->start(ILed::Mode::Volume, 1010, new_volume - 6);
+    led->start(ILed::Mode::Volume, 1210, new_volume - 6);
 
     if (!command_periodically_active) {
       command_start_time = system->get_timestamp() + 500;
       command_last_active_time = command_start_time;
       command_periodically_active = true;
       command = index;
+      player->play_beeps();
     }
     logger->print(ILogger::Debug, "Volume ");
     logger->print(ILogger::Debug, (int)new_volume);

@@ -33,6 +33,7 @@ public:
 
   /** stop current song */
   virtual void stop() = 0;
+  virtual void play_beeps() = 0;
 
   /**
    * play song according to current mode

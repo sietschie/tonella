@@ -13,6 +13,7 @@ class DFPlayer : public IDFPlayer {
 public:
   bool init() override;
   void pause() override;
+  void stop() override;
   void resume() override;
   void play(uint16_t folder, uint16_t index) override;
   void set_volume(uint8_t volume) override;

@@ -1,4 +1,5 @@
 #include "player.h"
+#include "Arduino.h"
 
 bool Player::init(IDFPlayer *_dfplayer, IMemory *_memory) {
   dfplayer = _dfplayer;
@@ -25,7 +26,9 @@ void Player::play(uint16_t index) {
 }
 
 void Player::pause() { dfplayer->pause(); }
+void Player::play_beeps() { dfplayer->play(1,4);}
 void Player::stop() {
+  Serial.println("player->stop()");
   dfplayer->pause();
   current_track = 0;
 }
@@ -33,8 +36,9 @@ void Player::stop() {
 void Player::set_volume(uint8_t _volume) {
   volume = _volume;
   memory->save_volume(volume);
+  //dfplayer->stop();
+  //dfplayer->play(1, 3);
   dfplayer->set_volume(volume);
-  dfplayer->play(1, 3);
 }
 
 uint8_t Player::get_volume() { return volume; }
