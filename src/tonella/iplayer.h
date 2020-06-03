@@ -33,6 +33,8 @@ public:
 
   /** stop current song */
   virtual void stop() = 0;
+
+  /** play loop of beeps */
   virtual void play_beeps() = 0;
 
   /**
