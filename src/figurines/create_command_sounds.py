@@ -17,8 +17,14 @@ def main():
 
     args = parser.parse_args()
 
-    download_name("Lied", join(args.path_dest, "001-TextLied.mp3"))
-    download_name("Geräusch", join(args.path_dest, "002-TextGeräusch.mp3"))
+    path_song = join(args.path_dest, "001-TextLieder.mp3")
+    download_name("Lieder", path_song)
+
+    path_sound = join(args.path_dest, "002-TextGeräusche.mp3")
+    download_name("Namen und Geräusche", path_sound)
+
+    path_story = join(args.path_dest, "005-TextGeschichten.mp3")
+    download_name("Geschichten", path_story)
 
 
 if __name__ == "__main__":
