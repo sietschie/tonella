@@ -12,33 +12,47 @@ import json
 import os.path
 import argparse
 import requests
+import multiprocessing
 
 import youtube_dl
 import pydub
 import yaml
+import joblib
+import tqdm
 
 
 def create_mp3s(path_to_config, path_src=".", path_dest="."):
     """Create figurine mp3s."""
     config = yaml.load(open(path_to_config, 'r'), Loader=yaml.BaseLoader)
 
-    name = get_name_from_tts(config['name_tts'], config['name'], path_src)
-    sound = get_from_youtube(config['sound']['link'],
-                             config['name'] + '-sound',
-                             config['sound']['selection'],
-                             path_src)
-    silence = pydub.AudioSegment.silent(duration=500)
-
     prefix = "%03d-" % (int(config['id'])) + config['name']
+    nameandsound_path = os.path.join(path_dest, prefix + "-nameandsound.mp3")
+    if not os.path.isfile(nameandsound_path):
+        name = get_name_from_tts(config['name_tts'], config['name'], path_src)
+        sound = get_from_youtube(config['sound']['link'],
+                                 config['name'] + '-sound',
+                                 config['sound']['selection'],
+                                 path_src)
+        silence = pydub.AudioSegment.silent(duration=500)
 
-    nameandsound = name + silence + sound
-    nameandsound.export(os.path.join(path_dest, prefix + "-nameandsound.mp3"))
+        nameandsound = name + silence + sound
+        nameandsound.export(nameandsound_path)
 
-    song = get_from_youtube(config['song']['link'],
-                            config['name'] + '-song',
-                            config['song']['selection'],
-                            path_src)
-    song.export(os.path.join(path_dest, prefix + '-song.mp3'))
+    song_path = os.path.join(path_dest, prefix + '-song.mp3')
+    if not os.path.isfile(song_path):
+        song = get_from_youtube(config['song']['link'],
+                                config['name'] + '-song',
+                                config['song']['selection'],
+                                path_src)
+        song.export(song_path)
+
+    story_path = os.path.join(path_dest, prefix + '-story.mp3')
+    if not os.path.isfile(story_path):
+        story = get_from_youtube(config['story']['link'],
+                                 config['name'] + '-story',
+                                 config['story']['selection'],
+                                 path_src)
+        story.export(story_path)
 
 
 def get_from_youtube(link, name, selection, path_src):
@@ -169,6 +183,7 @@ def main():
     for yaml_file in args.path_to_yaml_file:
         print("process %s" % yaml_file)
         create_mp3s(yaml_file, args.path_src, args.path_dest)
+
 
 
 if __name__ == "__main__":
