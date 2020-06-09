@@ -130,7 +130,6 @@ void StateMachine::execute_command(uint16_t index) {
     logger->print(ILogger::Debug, (int)new_volume);
     logger->println(ILogger::Debug);
   } else if (index == COMMAND_MODE_CHANGE) {
-    led->set(0, 1, 0);
     led->start(ILed::Mode::Wipe, 1010);
     player->change_to_next_mode();
   }

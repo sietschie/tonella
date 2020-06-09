@@ -91,28 +91,6 @@ jobs:
 
   # This is the name of the job - can be whatever.
   compile:
-
-    # Here we tell GitHub that the jobs must be determined
-    # dynamically depending on a matrix configuration.
-    strategy:
-      matrix:
-        # The matrix will produce one job for each configuration
-        # parameter of type `arduino-platform`, in this case a
-        # total of 2.
-        arduino-platform: ["arduino:avr"]
-        # This is usually optional but we need to statically define the
-        # FQBN of the boards we want to test for each platform. In the
-        # future the CLI might automatically detect and download the core
-        # needed to compile against a certain FQBN, at that point the
-        # following `include` section will be useless.
-        include:
-          # This works like this: when the platformn is "arduino:samd", the
-          # variable `fqbn` is set to "arduino:samd:nano_33_iot".
-          #- arduino-platform: "arduino:samd"
-          #  fqbn: "arduino:samd:nano_33_iot"
-          - arduino-platform: "arduino:avr"
-            fqbn: "arduino:avr:uno"
-
     # This is the platform GitHub will use to run our workflow, we
     # pick Windows for no particular reason.
     runs-on: ubuntu-latest
@@ -133,7 +111,7 @@ jobs:
       - name: Install platform
         run: |
           arduino-cli core update-index
-          arduino-cli core install ${{ matrix.arduino-platform }}
+          arduino-cli core install arduino:avr
           arduino-cli lib install MFRC522
           arduino-cli lib install DFRobotDFPlayerMini
           arduino-cli lib install "Adafruit NeoPixel"
@@ -141,7 +119,9 @@ jobs:
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
       - name: Compile Sketch
-        run: arduino-cli compile --fqbn ${{ matrix.fqbn }} src/tonella/tonella.ino
+        run: |
+            cd src/tonella
+            make
 
       - name: Copy binaries
         run: |

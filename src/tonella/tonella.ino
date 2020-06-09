@@ -8,6 +8,7 @@
 #include "player.h"
 #include "statemachine.h"
 #include "system.h"
+#include "version.h"
 
 DFPlayer dfplayer;
 Player player;
@@ -32,6 +33,10 @@ void idle(uint16_t sleep) {
 void setup() {
   sys.init();
   logger.init();
+  logger.print(ILogger::Info, "Version: ");
+  logger.println(ILogger::Info, build_version);
+  logger.print(ILogger::Info, "Build date: ");
+  logger.println(ILogger::Info, build_date);
 
   // Init LED
   logger.print(ILogger::Info, "Init LED: ");
