@@ -19,6 +19,7 @@ Additional these folders contain the information to prepare the mp3 files for th
 | F12  | monkey |
 | F13  | sheep |
 | F14  | snake |
+| F15  | fox - joke |
 | C01  | volumeDown |
 | C02  | volumeUp |
 | C03  | changeMode |
