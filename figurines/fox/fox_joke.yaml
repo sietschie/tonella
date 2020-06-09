@@ -1,0 +1,12 @@
+name: fox_joke
+id: 15
+name_tts:
+sound:
+    link: "https://www.youtube.com/watch?v=jofNR_WkoCE"
+    selection: [40, 72]
+song:
+    link: "https://www.youtube.com/watch?v=6FIqyOdYSvs"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=nJofxwa5bMo"
+    selection:
