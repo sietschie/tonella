@@ -54,6 +54,14 @@ def create_mp3s(path_to_config, path_src=".", path_dest="."):
                                  path_src)
         story.export(story_path)
 
+    metal_path = os.path.join(path_dest, prefix + '-metal.mp3')
+    if not os.path.isfile(metal_path):
+        metal = get_from_youtube(config['metal']['link'],
+                                 config['name'] + '-metal',
+                                 config['metal']['selection'],
+                                 path_src)
+        metal.export(metal_path)
+
 
 def get_from_youtube(link, name, selection, path_src):
     """
@@ -183,7 +191,6 @@ def main():
     for yaml_file in args.path_to_yaml_file:
         print("process %s" % yaml_file)
         create_mp3s(yaml_file, args.path_src, args.path_dest)
-
 
 
 if __name__ == "__main__":

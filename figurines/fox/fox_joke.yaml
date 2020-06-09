@@ -10,3 +10,6 @@ song:
 story:
     link: "https://www.youtube.com/watch?v=nJofxwa5bMo"
     selection:
+metal:
+    link: "https://www.youtube.com/watch?v=NVkRVFEWOjc"
+    selection: [34, 254]
