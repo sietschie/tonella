@@ -67,7 +67,7 @@ TEST(Player, ModeChangeTwice) {
   player.change_to_next_mode();
   player.change_to_next_mode();
 
-  EXPECT_EQ(player.get_mode(), IPlayer::Song);
+  EXPECT_EQ(player.get_mode(), IPlayer::Story);
 }
 
 TEST(Player, PlaySong) {

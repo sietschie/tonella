@@ -16,7 +16,7 @@ public:
    * Sound   playes a sound and says the name of the figurine
    * Song    plays a song associated with the figurine
    */
-  enum Mode { Sound, Song };
+  enum Mode { Sound, Song, Story, Metal };
 
   /**
    * initialize player
