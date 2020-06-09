@@ -33,10 +33,13 @@ bool Nfc::init() {
 }
 
 bool Nfc::readCard(Type &type, uint16_t &index) {
-  byte ultraLightReadSize = 18;
+  byte ultraLightReadSize = 36;
   byte data[ultraLightReadSize];
+
   byte size = ultraLightReadSize;
   int status = mfrc522.MIFARE_Read(ULTRALIGHT_DATA_START_PAGE, data, &size);
+  int status2 =
+      mfrc522.MIFARE_Read(ULTRALIGHT_DATA_START_PAGE + 4, data + 16, &size);
 
   int messageLength = 0;
   int messageStart = 0;
