@@ -26,6 +26,9 @@ def main():
     path_story = join(args.path_dest, "005-TextGeschichten.mp3")
     download_name("Geschichten", path_story)
 
+    path_metal = join(args.path_dest, "006-TextMetal.mp3")
+    download_name("Metall", path_metal)
+
 
 if __name__ == "__main__":
     main()
