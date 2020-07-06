@@ -46,6 +46,22 @@ def create_mp3s(path_to_config, path_src=".", path_dest="."):
                                 path_src)
         song.export(song_path)
 
+    song_trimmed_path = os.path.join(path_dest, prefix + '-song_trimmed.mp3')
+    if not os.path.isfile(song_trimmed_path):
+        song_trimmed = get_from_youtube(config['song']['link'],
+                                        config['name'] + '-song',
+                                        config['song']['selection'],
+                                        path_src)
+
+        dbfs = [s.dBFS > -20 for s in song_trimmed]
+        for i in range(len(dbfs)):
+            if dbfs[i]:
+                break
+
+        song_trimmed_path = os.path.join(path_dest, prefix + '-song_trimmed_%d.mp3' % i)
+        song_trimmed[i:].export(song_trimmed_path)
+        #import ipdb; ipdb.set_trace()
+
     story_path = os.path.join(path_dest, prefix + '-story.mp3')
     if not os.path.isfile(story_path):
         story = get_from_youtube(config['story']['link'],
