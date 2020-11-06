@@ -74,7 +74,9 @@ def get_from_youtube(link, name, selection, path_src):
     name -- prefix of mp3 filename
     selection -- list with start end endpoint in seconds
     """
-    filename = os.path.join(path_src, name)
+    youtube_id = link.split('=')[-1]
+    filename = os.path.join(path_src, name) + "_" + youtube_id
+
     if not os.path.isfile(filename + ".mp3"):
         print(filename, link)
         counter = 0
