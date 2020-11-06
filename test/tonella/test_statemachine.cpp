@@ -18,6 +18,7 @@ using ::testing::NiceMock;
 using ::testing::Return;
 using ::testing::Sequence;
 using ::testing::SetArgReferee;
+using ::testing::DoAll;
 
 TEST(StateMachine, PlaySong) {
   NiceMock<MockLED> led;
