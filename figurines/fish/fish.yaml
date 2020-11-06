@@ -1,0 +1,15 @@
+name: fish
+id: 1
+name_tts: Fisch
+sound:
+    link: "https://www.youtube.com/watch?v=ThXmiLabzME"
+    selection: [4,9]
+song:
+    link: "https://www.youtube.com/watch?v=gJLM21t9-n8"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=UW9nCy2HAN4"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=vsn5QdPWJw4"
+    selection: [5, 216]

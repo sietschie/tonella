@@ -1,0 +1,15 @@
+name: pig
+id: 1
+name_tts: Schwein
+sound:
+    link: "https://www.youtube.com/watch?v=Bg2BlPy1I30"
+    selection:
+song:
+    link: "https://www.youtube.com/watch?v=ABDl9WB-bj8"
+    selection: [22,175]
+story:
+    link: "https://www.youtube.com/watch?v=RhXVCAc_NGs"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=WZDryUOGYQc"
+    selection:

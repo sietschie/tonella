@@ -1,0 +1,15 @@
+name: bird
+id: 1
+name_tts: Vogel
+sound:
+    link: "https://www.youtube.com/watch?v=tv61ajZ6hc0"
+    selection:
+song:
+    link: "https://www.youtube.com/watch?v=UbxQkV07Z1M"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=bqJWYbM_zmE"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=Z1XQ-ZWFk6M"
+    selection:
