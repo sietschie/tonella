@@ -1,0 +1,15 @@
+name: penguin
+id: 13
+name_tts: Pinguin
+sound:
+    link: "https://www.youtube.com/watch?v=1HZP6Hw08Ug"
+    selection:
+song:
+    link: "https://www.youtube.com/watch?v=NPQcGuWzuI0"
+    selection: [3, 90]
+story:
+    link: "https://www.youtube.com/watch?v=GNgmSI5JATI"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=ylaQvvNILt4"
+    selection:
