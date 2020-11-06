@@ -58,9 +58,9 @@ def create_mp3s(path_to_config, path_src=".", path_dest="."):
             if dbfs[i]:
                 break
 
-        song_trimmed_path = os.path.join(path_dest, prefix + '-song_trimmed_%d.mp3' % i)
+        song_trimmed_path = os.path.join(path_dest,
+                                         prefix + '-song_trimmed_%d.mp3' % i)
         song_trimmed[i:].export(song_trimmed_path)
-        #import ipdb; ipdb.set_trace()
 
     story_path = os.path.join(path_dest, prefix + '-story.mp3')
     if not os.path.isfile(story_path):
