@@ -79,12 +79,12 @@ def get_from_youtube(link, name, selection, path_src):
         print(filename, link)
         counter = 0
         success = False
-        while success == False and counter < 5:
+        while not success and counter < 5:
             try:
                 print('try', counter, filename, link)
                 download_from_youtube(link, filename)
                 success = True
-            except:
+            except youtube_dl.utils.DownloadError as e:
                 counter += 1
         if not success:
             raise Exception()
