@@ -2,8 +2,8 @@ name: horse
 id: 10
 name_tts: Pferd
 sound:
-    link: "https://www.youtube.com/watch?v=8J75h_wZo9M"
-    selection: [0, 16]
+    link: "https://www.youtube.com/watch?v=avcRRcIRnbY"
+    selection: [0, 14]
 song:
     link: "https://www.youtube.com/watch?v=-lSndZ7cAgU"
     selection:

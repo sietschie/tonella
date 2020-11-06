@@ -76,7 +76,18 @@ def get_from_youtube(link, name, selection, path_src):
     """
     filename = os.path.join(path_src, name)
     if not os.path.isfile(filename + ".mp3"):
-        download_from_youtube(link, filename)
+        print(filename, link)
+        counter = 0
+        success = False
+        while success == False and counter < 5:
+            try:
+                print('try', counter, filename, link)
+                download_from_youtube(link, filename)
+                success = True
+            except:
+                counter += 1
+        if not success:
+            raise Exception()
     else:
         print("%s already exists, skip downloading" % (filename + ".mp3"))
 
