@@ -1,0 +1,15 @@
+name: sandmann
+id: 23
+name_tts: Sandmann
+sound:
+    link: "https://www.youtube.com/watch?v=3CUzBvto7Xo"
+    selection: [4,10]
+song:
+    link: "https://www.youtube.com/watch?v=T7z8Id9eJx0"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=_oIHk2d5tEM"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=CD-E-LDc384"
+    selection:

@@ -20,6 +20,14 @@ Additional these folders contain the information to prepare the mp3 files for th
 | F13  | sheep |
 | F14  | snake |
 | F15  | fox - joke |
+| F16  | bird |
+| F17  | fish |
+| F18  | pig |
+| F19  | penguin |
+| F20  | santaclaus |
+| F21  | crocodile |
+| F22  | cake |
+| F23  | sandmann |
 | C01  | volumeDown |
 | C02  | volumeUp |
 | C03  | changeMode |

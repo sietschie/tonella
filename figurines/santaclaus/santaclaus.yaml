@@ -1,0 +1,15 @@
+name: santaclaus
+id: 20
+name_tts: Weihnachtsmann
+sound:
+    link: "https://www.youtube.com/watch?v=AjdASkuZ9T8"
+    selection: [0,2]
+song:
+    link: "https://www.youtube.com/watch?v=4JSOmSsv4zc"
+    selection: [7,166]
+story:
+    link: "https://www.youtube.com/watch?v=1CMuzc-bPRE"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=jzsSpsJimPw"
+    selection:
