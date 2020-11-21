@@ -1,0 +1,1 @@
+xvfb-run -n 0 blender -b /mnt/c/Users/goering/SynologyDrive/tonella/models/figurines/elephant/figurine_elephant2.blend --python render_figurine.py
