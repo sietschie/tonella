@@ -29,6 +29,7 @@ Additional these folders contain the information to prepare the mp3 files for th
 | F22  | cake |
 | F23  | sandmann |
 | F24  | christmastree |
+| F25  | butterfly |
 | C01  | volumeDown |
 | C02  | volumeUp |
 | C03  | changeMode |

@@ -1,0 +1,15 @@
+name: butterfly
+id: 25
+name_tts: Schmetterling
+sound:
+    link: 
+    selection:
+song:
+    link: "https://www.youtube.com/watch?v=W23huBDyCms"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=4Waw5sakDfs"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=Lb2s28AnNHA"
+    selection:
