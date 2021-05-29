@@ -1,0 +1,15 @@
+name: christmastree
+id: 24
+name_tts: Weihnachtsbaum
+sound:
+    link: 
+    selection: 
+song:
+    link: "https://www.youtube.com/watch?v=27JleM39TPY"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=AGwarlJqR9I"
+    selection:
+metal:
+    link: "https://www.youtube.com/watch?v=wLWYUSIHNIQ"
+    selection:

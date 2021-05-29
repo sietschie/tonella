@@ -1,0 +1,15 @@
+name: star
+id: 25
+name_tts: Stern
+sound:
+    link: 
+    selection: 
+song:
+    link: "https://www.youtube.com/watch?v=GaLkZhU1smI"
+    selection:
+story:
+    link: "https://www.youtube.com/watch?v=T78umUWYNkI"
+    selection: [0, 1004]
+metal:
+    link: "https://www.youtube.com/watch?v=Pgum6OT_VH8"
+    selection:
