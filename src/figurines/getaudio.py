@@ -29,13 +29,16 @@ def create_mp3s(path_to_config, path_src=".", path_dest="."):
     nameandsound_path = os.path.join(path_dest, prefix + "-nameandsound.mp3")
     if not os.path.isfile(nameandsound_path):
         name = get_name_from_tts(config['name_tts'], config['name'], path_src)
-        sound = get_from_youtube(config['sound']['link'],
-                                 config['name'] + '-sound',
-                                 config['sound']['selection'],
-                                 path_src)
-        silence = pydub.AudioSegment.silent(duration=500)
+        if config['sound']['link']:
+            sound = get_from_youtube(config['sound']['link'],
+                                     config['name'] + '-sound',
+                                     config['sound']['selection'],
+                                     path_src)
+            silence = pydub.AudioSegment.silent(duration=500)
 
-        nameandsound = name + silence + sound
+            nameandsound = name + silence + sound
+        else:
+            nameandsound = name
         nameandsound.export(nameandsound_path)
 
     song_path = os.path.join(path_dest, prefix + '-song.mp3')
