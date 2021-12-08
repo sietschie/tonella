@@ -14,7 +14,7 @@ import argparse
 import requests
 import multiprocessing
 
-import youtube_dl
+import yt_dlp as youtube_dl
 import pydub
 import yaml
 import joblib
