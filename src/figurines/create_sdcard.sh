@@ -7,7 +7,7 @@ mkdir -p sd_card/01 sd_card/02 sd_card/03 sd_card/04 sd_card/05 tmp_src tmp_dest
 #prepare python environment
 python3 -m venv .venv
 source .venv/bin/activate
-pip3 install pydub requests youtube-dl pyyaml scipy numpy joblib tqdm
+pip3 install -r requirements.txt
 
 ./getaudio.py ../../figurines/*/*.yaml --path_src tmp_src --path_dest tmp_dest
 cp tmp_dest/*-nameandsound.mp3 sd_card/03
